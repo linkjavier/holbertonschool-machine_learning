@@ -5,6 +5,9 @@
 def poly_derivative(poly):
     """ Calculates the derivative of a polynomial """
 
+    if not poly:
+        return None
+
     if poly:
 
         newCoefficient = []
