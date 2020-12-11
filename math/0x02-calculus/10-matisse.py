@@ -5,13 +5,11 @@
 def poly_derivative(poly):
     """ Calculates the derivative of a polynomial """
 
-    polyType = type(poly)
-    polyTypeFirst = type(poly[0])
     lenPoly = len(poly)
     result = []
     zeroFlag = True
 
-    if polyType != list or poly == [] or polyTypeFirst not in [int, float]:
+    if type(poly) != list or poly == [] or type(poly[0]) not in [int, float]:
         return None
 
     if lenPoly == 1:
