@@ -5,25 +5,21 @@
 def poly_derivative(poly):
     """ Calculates the derivative of a polynomial """
 
-    lenPoly = len(poly)
-    result = []
-    zeroFlag = True
+    if poly:
 
-    if type(poly) != list or poly == [] or type(poly[0]) not in [int, float]:
+        newCoefficient = []
+
+        if len(poly) == 1:
+            newCoefficient.append(0)
+
+        for index in range(len(poly)):
+            if index != 0:
+
+                coefficient = poly[index]
+                grade = index
+                newCoefficient.append(coefficient * grade)
+
+    else:
         return None
 
-    if lenPoly == 1:
-        return [0]
-
-    for index, coeficient in enumerate(poly[1:]):
-        if type(coeficient) not in [int, float]:
-            return None
-
-        result.append((index + 1) * coeficient)
-        if zeroFlag and result[-1]:
-            zeroFlag = False
-
-    if zeroFlag:
-        return [0]
-
-    return result
+    return newCoefficient
