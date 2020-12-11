@@ -12,6 +12,7 @@ def poly_integral(poly, C=0):
         return None
 
     integrationConstant = int(C)
+
     if integrationConstant == C:
         result.append(integrationConstant)
     else:
