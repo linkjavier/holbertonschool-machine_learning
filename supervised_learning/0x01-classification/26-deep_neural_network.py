@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """ Python program to implement a deep neural network """
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pickle
@@ -49,14 +50,17 @@ class DeepNeuralNetwork():
 
     @property
     def L(self):
+        """Method to get L"""
         return self.__L
 
     @property
     def cache(self):
+        """Method to get cache"""
         return self.__cache
 
     @property
     def weights(self):
+        """Method to get weights"""
         return self.__weights
 
     def forward_prop(self, X):
@@ -210,7 +214,7 @@ class DeepNeuralNetwork():
         return self.evaluate(X, Y)
 
     def save(self, filename):
-        """ """
+        """ Method to save in pickle object"""
         if filename[-4:] != ".pkl":
             filename = filename + ".pkl"
         with open(filename, 'wb') as f:
@@ -219,7 +223,7 @@ class DeepNeuralNetwork():
 
     @staticmethod
     def load(filename):
-        """ """
+        """ Method to load a pickle object"""
         try:
             with open(filename, 'rb') as f:
                 obj = pickle.load(f)
