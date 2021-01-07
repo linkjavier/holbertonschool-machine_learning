@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-""" Python program to implement a single neuron neural network """
+""" Python program to implement a deep neural network """
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class DeepNeuralNetwork():
@@ -18,6 +17,7 @@ class DeepNeuralNetwork():
     """
 
     def __init__(self, nx, layers):
+        """Class constructor"""
 
         if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
