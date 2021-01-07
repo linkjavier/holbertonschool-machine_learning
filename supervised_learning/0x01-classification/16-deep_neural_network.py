@@ -31,7 +31,7 @@ class DeepNeuralNetwork():
             raise ValueError('nx must be a positive integer')
 
         if not isinstance(layers, list) or len(layers) == 0:
-                raise TypeError("layers must be a list of positive integers")
+            raise TypeError("layers must be a list of positive integers")
 
         self.L = len(layers)
         self.cache = {}
@@ -45,12 +45,12 @@ class DeepNeuralNetwork():
             if lay == 0:
                 # He et al. initialization for weights in first layer
                 He = (np.random.randn(layers[lay], nx)
-                    * np.sqrt(2 / nx))
+                      * np.sqrt(2 / nx))
                 self.weights["W{}".format(lay + 1)] = He
             else:
                 # He et al. initialization for weights
                 He = (np.random.randn(layers[lay], layers[lay - 1])
-                    * np.sqrt(2 / layers[lay - 1]))
+                      * np.sqrt(2 / layers[lay - 1]))
                 self.weights["W{}".format(lay + 1)] = He
             # Zero initialization for biases
             self.weights["b{}".format(lay + 1)] = np.zeros((layers[lay], 1))
