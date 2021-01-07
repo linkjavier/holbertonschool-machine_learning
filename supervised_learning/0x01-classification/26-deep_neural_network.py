@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Python program to implement a deep neural network """
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 import pickle
 
 
