@@ -183,32 +183,36 @@ class DeepNeuralNetwork():
         if alpha < 0:
             raise ValueError('alpha must be positive')
 
-        Costs = list()
-        IterationsStorage = [*list(range(iterations)), iterations]
+        Costs = []
+        IterationsStorage = []
 
-        for i in IterationsStorage:
-            A, cost = self.evaluate(X, Y)
-
-            if verbose and i % step == 0:
-                print('Cost after ' + str(i) + ' iterations: ' + str(cost))
-            Costs.append(cost)
+        for i in range(iterations):
+            self.forward_prop(X)
             self.gradient_descent(Y, self.cache, alpha)
+            cost = self.cost(Y, self.__cache["A{}".format(self.__L)])
 
-        if graph:
-            plt.plot(IterationsStorage, Costs)
-            plt.xlabel('iterations')
-            plt.ylabel('cost')
-            plt.title('Training cost')
+            if (i % step == 0 or i == iterations):
+                Costs.append(cost)
+                IterationsStorage.append(i)
+
+                if verbose is True:
+                    print("Cost after {} iterations: {}".format(i, cost))
+
+        if graph is True:
+            x = IterationsStorage
+            y = Costs
+            plt.plot(x, y, 'b-')
+            plt.xlabel("iteration")
+            plt.ylabel("cost")
+            plt.title("Training cost")
             plt.show()
 
-        return A, cost
+        return self.evaluate(X, Y)
 
     def save(self, filename):
-        """ Saves the instance object to a file in pickle format """
-
-        if filename[-4:] != '.pkl':
-            filename = filename + '.pkl'
-
+        """ """
+        if filename[-4:] != ".pkl":
+            filename = filename + ".pkl"
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
             f.close()
@@ -218,8 +222,7 @@ class DeepNeuralNetwork():
         """ """
         try:
             with open(filename, 'rb') as f:
-                pickleObject = pickle.load(f)
-                return pickleObject
-
+                obj = pickle.load(f)
+                return obj
         except FileNotFoundError:
             return None
