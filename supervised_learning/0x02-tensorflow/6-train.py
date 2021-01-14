@@ -15,8 +15,8 @@ def train(X_train, Y_train, X_valid, Y_valid,
           save_path="/tmp/model.ckpt"):
     """ Function that builds, trains, and saves a neural network classifier """
 
-    nx = X_train.shape
-    classes = Y_train.shape
+    _, nx = X_train.shape
+    _, classes = Y_train.shape
     x, y = create_placeholders(nx, classes)
     y_pred = forward_prop(x, layer_sizes, activations)
     accuracy = calculate_accuracy(y, y_pred)
@@ -34,7 +34,7 @@ def train(X_train, Y_train, X_valid, Y_valid,
     saver = tf.train.Saver()
 
     with tf.Session() as sess:
-        sess.run(init_op)
+        sess.run(init)
 
         for i in range(iterations + 1):
             t_cost, t_accuracy = sess.run(
@@ -45,7 +45,7 @@ def train(X_train, Y_train, X_valid, Y_valid,
                 [loss, accuracy],
                 feed_dict={x: X_valid, y: Y_valid})
 
-            if i % step == 0 or i == iterations:
+            if i % iterations == 0 or i == iterations:
 
                 print("After {} iterations:".format(i))
                 print("\tTraining Cost: {}".format(t_cost))
