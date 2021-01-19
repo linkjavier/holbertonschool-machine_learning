@@ -10,9 +10,9 @@ def sensitivity(confusion):
     classes, _ = confusion.shape
     classSensitivity = np.zeros(classes)
 
-    for class_ in range(classes):
-        classSensitivity[class_] = np.divide(
-            confusion[class_][class_], np.sum(
-                confusion[class_]))
+    for classItem in range(classes):
+        classSensitivity[classItem] = np.divide(
+            confusion[classItem][classItem], np.sum(
+                confusion[classItem]))
 
     return classSensitivity
