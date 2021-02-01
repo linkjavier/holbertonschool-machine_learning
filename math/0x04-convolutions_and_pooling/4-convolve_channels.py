@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Convolve channels"""
+"""Convolve channels Module """
 import numpy as np
 
 
 def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
-    """Performs a convolution on images with channels"""
+    """Function that performs a convolution on images with channels"""
     m, h, w, c = images.shape
     KernelHeight, kernelWidth, c = kernel.shape
     StrideHeight, StrideWidth = stride
