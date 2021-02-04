@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pool forward"""
+""" Pooling Back Prop """
 import numpy as np
 
 
