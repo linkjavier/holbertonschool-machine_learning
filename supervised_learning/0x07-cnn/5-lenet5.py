@@ -10,60 +10,41 @@ def lenet5(X):
 
     init = K.initializers.he_normal()
 
-    conv2d1 = K.layers.Conv2D(
-        6,
-        (5, 5),
-        activation='relu',
-        padding='same',
-        kernel_initializer=init
-    )(X)
+    ConvoLayer1 = K.layers.Conv2D(
+        6, (5, 5), activation='relu', padding='same',
+        kernel_initializer=init)(X)
 
-    maxpool1 = K.layers.MaxPooling2D(
-        (2, 2),
-        (2, 2),
-    )(conv2d1)
+    maxpoolLayer1 = K.layers.MaxPooling2D((2, 2), (2, 2),)(ConvoLayer1)
 
-    con2d2 = K.layers.Conv2D(
+    ConvoLayer2 = K.layers.Conv2D(
         16,
-        (5, 5),
+        (5,
+         5),
         activation='relu',
         padding='valid',
-        kernel_initializer=init
-    )(maxpool1)
+        kernel_initializer=init)(maxpoolLayer1)
 
-    maxpool2 = K.layers.MaxPooling2D(
-        (2, 2),
-        (2, 2),
-    )(con2d2)
+    maxpoolLayer2 = K.layers.MaxPooling2D((2, 2), (2, 2),)(ConvoLayer2)
 
-    flatten = K.layers.Flatten()(maxpool2)
+    flatten = K.layers.Flatten()(maxpoolLayer2)
 
-    fullcc1 = K.layers.Dense(
-        120,
-        activation='relu',
-        kernel_initializer=init
-    )(flatten)
+    FullyConnectedLayer1 = K.layers.Dense(
+        120, activation='relu', kernel_initializer=init)(flatten)
 
-    fullcc2 = K.layers.Dense(
-        84,
-        activation='relu',
-        kernel_initializer=init
-    )(fullcc1)
+    FullyConnectedLayer2 = K.layers.Dense(
+        84, activation='relu', kernel_initializer=init)(FullyConnectedLayer1)
 
-    fullcc3 = K.layers.Dense(
-        10,
-        activation='softmax',
-        kernel_initializer=init
-    )(fullcc2)
+    FullyConnectedLayer3 = K.layers.Dense(
+        10, activation='softmax',
+        kernel_initializer=init)(FullyConnectedLayer2)
 
-    model = K.Model(inputs=X, outputs=fullcc3)
+    model = K.Model(inputs=X, outputs=FullyConnectedLayer3)
 
-    opt = K.optimizers.Adam()
+    AdamOptimization = K.optimizers.Adam()
 
     model.compile(
         loss='categorical_crossentropy',
-        optimizer=opt,
-        metrics=['accuracy']
-    )
+        optimizer=AdamOptimization,
+        metrics=['accuracy'])
 
     return model
