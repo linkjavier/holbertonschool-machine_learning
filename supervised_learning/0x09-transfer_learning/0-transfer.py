@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """ 0x09. Transfer Learning """
 
-
+import tensorflow as tf
 import tensorflow.keras as K
+
+
+# Load CIFAR10 Data
+(X_train, Y_train), (X_test, Y_test) = K.datasets.cifar10.load_data()
 
 
 def preprocess_data(X, Y):
@@ -11,37 +15,69 @@ def preprocess_data(X, Y):
         to classify the CIFAR 10 dataset
     """
 
-    X = X.astype('float32')
-    StartX = K.applications.inception_v3.preprocess_input(X)
-    StartY = K.utils.to_categorical(Y, 10)
-    return (StartX, StartY)
+    # Keras Application expects a specific kind of input preprocessing
+    X_p = K.applications.inception_resnet_v2.preprocess_input(X)
+
+    # Add a file numbers from 0 to 9 categorically (CIFAR10 Categories)
+    Y_p = K.utils.to_categorical(Y, 10)
+
+    return (X_p, Y_p)
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    (CifarX, CifarY), (X, Y) = K.datasets.cifar10.load_data()
-    PreCifarX, PreCifarY = preprocess_data(CifarX, CifarY)
-    StartX, StartY = preprocess_data(X, Y)
+# Apply preprocessing
+X_train, Y_train = preprocess_data(X_train, Y_train)
+X_test, Y_test = preprocess_data(X_test, Y_test)
 
-    base = K.applications.InceptionV3(include_top=False, weights='imagenet')
-    base.trainable = False
-    model = K.Sequential()
-    model.add(K.layers.Lambda(lambda x: K.backend.resize_images(x, 9, 9, 'channels_last', 'bilinear')))
-    model.add(base)
-    model.add(K.layers.Flatten())
-    model.add(K.layers.Dense(512, activation=('relu')))
-    model.add(K.layers.Dropout(0.2))
-    model.add(K.layers.Dense(256, activation=('relu')))
-    model.add(K.layers.Dropout(0.2))
-    model.add(K.layers.Dense(10, activation=('softmax')))
-    callback = []
+# Transfer Learning Start
 
-    def rate_decay(epoch):
-        decay = 0.001 / (1 + (0.01 * epoch))
-        return (decay)
+base_model = K.applications.InceptionResNetV2(
+    include_top=False, weights="imagenet", input_shape=(299, 299, 3))
 
-    learning = K.callbacks.LearningRateScheduler(schedule=rate_decay, verbose=1)
-    callback.append(learning)
-    callback.append(K.callbacks.ModelCheckpoint('cifar10.h5', monitor='val_accuracy', save_best_only=True, mode='max'))
-    opt = K.optimizers.SGD(learning_rate=0.001) model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
-    model.fit(x=PreCifarX, y=PreCifarY, batch_size=128, epochs=30, verbose=1, shuffle=True, validation_data=(StartX, StartY), callbacks=callback)
+# Start inputs with 32x32 size
+inputs = K.Input(shape=(32, 32, 3))
+
+# Lambda layer that scales up the data to the correct size
+input = K.layers.Lambda(
+    lambda image: tf.image.resize(
+        image, (299, 299)))(inputs)
+
+# Base Model Layers
+x = base_model(input, training=false)
+x = K.layers.GlobalAveragePooling2D()(x)
+x = K.layers.Dense(500, activation='relu')(x)
+x = K.layers.Dropout(0.3)(x)  # For Overfitting
+outputs = K.layers.Dense(10, activation='softmax')(x)
+
+# Mount the model
+model = K.Model(inputs, outputs)
+
+base_model.trainable = False  # Freeze
+optimizer = K.optimizers.Adam()
+
+# Adam, stochastic gradient descent method that
+# is based on adaptive estimation of first-order
+# and second-order moments.
+
+# Compile the model
+model.compile(
+    loss="categorical_crossentropy",
+    optimizer=optimizer,
+    metrics=["acc"])  # Accuracy
+
+history = model.fit(
+    X_train,
+    Y_train,
+    validation_data=(
+        X_test,
+        Y_test),
+    batch_size=300,
+    epochs=4,
+    verbose=1)
+
+# verbose = 1, which includes both progress bar and one line per epoch.
+# verbose = 0, means silent.
+# verbose = 2, one line per epoch i.e. epoch no./total no
+
+model.save('cifar10.h5')
