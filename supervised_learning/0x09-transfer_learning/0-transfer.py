@@ -44,7 +44,7 @@ input = K.layers.Lambda(
         image, (299, 299)))(inputs)
 
 # Base Model Layers
-x = base_model(input, training=false)
+x = base_model(input, training=False)
 x = K.layers.GlobalAveragePooling2D()(x)
 x = K.layers.Dense(500, activation='relu')(x)
 x = K.layers.Dropout(0.3)(x)  # For Overfitting
