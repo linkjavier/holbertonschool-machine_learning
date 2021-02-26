@@ -51,7 +51,7 @@ class Yolo:
             box_class_prob = 1 / (1 + np.exp(-(ItemOutput[..., 5:])))
             box_class_probs.append(box_class_prob)
 
-        for iter, box in enumerate(boxes):
+        for i, box in enumerate(boxes):
             grid_height = box.shape[0]
             grid_width = box.shape[1]
             anchor_boxes = box.shape[2]
@@ -69,8 +69,8 @@ class Yolo:
             box[..., 0] += WidthMatrix
             box[..., 1] += HeightMatrix
 
-            anchor_width = self.anchors[iter, :, 0]
-            anchor_hight = self.anchors[iter, :, 1]
+            anchor_width = self.anchors[i, :, 0]
+            anchor_hight = self.anchors[i, :, 1]
 
             box[..., 2:] = np.exp(box[..., 2:])
             box[..., 2] *= anchor_width
