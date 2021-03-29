@@ -28,27 +28,58 @@ class MultiNormal:
         if not isinstance(x, np.ndarray):
             raise TypeError("x must be a numpy.ndarray")
 
-        d = self.cov.shape[0]
+        dimensions = self.mean.shape[0]
 
         if len(x.shape) != 2:
-            raise ValueError('x must have the shape ({}, 1)'.format(d))
+            text = 'x must have the shape ({}, 1)'.format(dimensions)
+            raise ValueError(text)
 
-        if x.shape[1] != 1 or x.shape[0] != d:
-            raise ValueError('x must have the shape ({}, 1)'.format(d))
+        if x.shape[0] != dimensions or x.shape[1] != 1:
+            text = 'x must have the shape ({}, 1)'.format(dimensions)
+            raise ValueError(text)
 
-        dimensions = x.shape[0]
+        base = 1 / np.sqrt(((2 * np.pi) ** dimensions)
+                           * (np.linalg.det(self.cov)))
 
-        mean = self.mean
-        cov = self.cov
+        factor = np.matmul(-(x - self.mean).T, np.linalg.inv(self.cov))
 
-        covarianceDeterminant = np.linalg.det(cov)
-        covarianceInverse = np.linalg.inv(cov)
+        multiplier = (x - self.mean) / 2
 
-        denominator = np.sqrt(((2 * np.pi) ** dimensions)
-                              * covarianceDeterminant)
-        exponent = -0.5 * \
-            np.matmul(np.matmul((x - mean).T, covarianceInverse), x - mean)
+        product = np.matmul(factor, multiplier)
 
-        pdf = (1 / denominator) * np.exp(exponent[0][0])
+        exponent = np.exp(product)
+        pdf = base * exponent
 
-        return pdf
+        return (pdf.reshape(-1)[0])
+
+    # def pdf(self, x):
+    #     """ Public instance method def that calculates
+    #         the PDF at a data point """
+
+    #     if not isinstance(x, np.ndarray):
+    #         raise TypeError("x must be a numpy.ndarray")
+
+    #     d = self.cov.shape[0]
+
+    #     if len(x.shape) != 2:
+    #         raise ValueError('x must have the shape ({}, 1)'.format(d))
+
+    #     if x.shape[1] != 1 or x.shape[0] != d:
+    #         raise ValueError('x must have the shape ({}, 1)'.format(d))
+
+    #     dimensions = x.shape[0]
+
+    #     mean = self.mean
+    #     cov = self.cov
+
+    #     covarianceDeterminant = np.linalg.det(cov)
+    #     covarianceInverse = np.linalg.inv(cov)
+
+    #     denominator = np.sqrt(((2 * np.pi) ** dimensions)
+    #                           * covarianceDeterminant)
+    #     exponent = -0.5 * \
+    #         np.matmul(np.matmul((x - mean).T, covarianceInverse), x - mean)
+
+    #     pdf = (1 / denominator) * np.exp(exponent[0][0])
+
+    #     return pdf
