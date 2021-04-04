@@ -11,9 +11,9 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
         of clusters by variance
     """
 
-    if type(X) is not np.ndarray and type(kmin) is not int:
+    if type(X) is not np.ndarray or type(kmin) is not int:
         return (None, None)
-    if kmax is not None and type(kmax) is not int:
+    if kmax is not None or type(kmax) is not int:
         return (None, None)
     if kmax is None:
         kmax = X.shape[0]
