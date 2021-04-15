@@ -42,12 +42,10 @@ class GaussianProcess:
         secondCKM = self.kernel(X_s, X_s)
         inverseK = np.linalg.inv(self.K)
 
-        mu = np.dot(covarianceKernelMatrix.T, inverseK).dot(self.Y)
-        mu = mu.reshape((X_s.shape[0]))
+        mu = covarianceKernelMatrix.T.dot(inverseK).dot(self.Y)
+        mu = mu.reshape(-1)
         sigma = np.diag(
             secondCKM -
-            np.dot(
-                covarianceKernelMatrix.T,
-                inverseK).dot(covarianceKernelMatrix))
+            covarianceKernelMatrix.T.dot(inverseK).dot(covarianceKernelMatrix))
 
         return mu, sigma
