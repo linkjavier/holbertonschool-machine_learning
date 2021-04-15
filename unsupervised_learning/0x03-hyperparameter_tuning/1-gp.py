@@ -32,4 +32,5 @@ class GaussianProcess:
         sigma = np.diag(
             secondCKM -
             covarianceKernelMatrix.T.dot(inverseK).dot(covarianceKernelMatrix))
+
         return mu, sigma
