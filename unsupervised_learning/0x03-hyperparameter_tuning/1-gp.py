@@ -30,8 +30,7 @@ class GaussianProcess:
         inverseK = np.linalg.inv(self.K)
         mu = covarianceKernelMatrix.T.dot(inverseK).dot(self.Y)
         mu = mu.reshape(-1)
-        sigma = np.diag(
-            secondCKM -
-            covarianceKernelMatrix.T.dot(inverseK).dot(covarianceKernelMatrix))
+        product = covarianceKernelMatrix.T.dot(inverseK)
+        sigma = np.diag(secondCKM - product.dot(covarianceKernelMatrix))
 
         return mu, sigma
