@@ -15,13 +15,7 @@ class GaussianProcess:
         self.l = l
         self.sigma_f = sigma_f
 
-        sum1 = np.sum(X_init**2, 1)
-        squaredDistance = sum1.reshape(-1, 1) + \
-            sum1 - 2 * np.dot(X_init, X_init.T)
-        covarianceKernelMatrix = sigma_f**2 * \
-            np.exp(-0.5 / l**2 * squaredDistance)
-
-        self.K = covarianceKernelMatrix
+        self.K = self.kernel(X_init, X_init)
 
     def kernel(self, X1, X2):
         """ Method that calculates the covariance kernel matrix
