@@ -22,12 +22,9 @@ class GaussianProcess:
         """ Method that calculates the covariance kernel matrix
             between two matrices """
 
-        squaredDistance = np.sum(X1**2, 1).reshape(-1, 1) + \
+        sqdist = np.sum(X1**2, 1).reshape(-1, 1) + \
             np.sum(X2**2, 1) - 2 * np.dot(X1, X2.T)
-        covarianceKernelMatrix = self.sigma_f**2 * \
-            np.exp(-0.5 / self.l**2 * squaredDistance)
-
-        return covarianceKernelMatrix
+        return self.sigma_f**2 * np.exp(-0.5 / self.l**2 * sqdist)
 
     def predict(self, X_s):
         """ Method that predicts the mean and standard deviation
