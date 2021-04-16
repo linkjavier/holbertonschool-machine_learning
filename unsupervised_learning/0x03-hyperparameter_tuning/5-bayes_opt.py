@@ -46,8 +46,8 @@ class BayesianOptimization:
             EI[sigma == 0.0] = 0.0
 
         X_next = self.X_s[np.argmax(EI)]
-        return (X_next, EI.reshape(-1)) 
-    
+        return (X_next, EI.reshape(-1))
+
     def optimize(self, iterations=100):
         """ Public instance method that optimizes the black-box function """
         for _ in range(iterations):
