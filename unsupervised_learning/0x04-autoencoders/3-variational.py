@@ -52,13 +52,14 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     DecoderLayer = DecoderTensor
 
     for layer in reversed(hidden_layers):
-        DecoderTensor = keras.layers.Dense(
+        DecoderLayer = keras.layers.Dense(
             layer,
-            activation='relu')(DecoderTensor)
+            activation='relu')(DecoderLayer)
 
-    DecoderTensor = keras.layers.Dense(
-        input_dims, activation='sigmoid')(DecoderTensor)
-    decoder = keras.models.Model(DecoderLayer, DecoderTensor)
+    DecoderLayer = keras.layers.Dense(
+        input_dims, activation='sigmoid')(DecoderLayer)
+    
+    decoder = keras.Model(inputs=DecoderTensor, outputs=DecoderLayer)
 
     # Autoencoder
     autoEncoderBottleneck = encoder(EncoderTensor)
