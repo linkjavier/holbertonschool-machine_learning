@@ -58,7 +58,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
 
     DecoderLayer = keras.layers.Dense(
         input_dims, activation='sigmoid')(DecoderLayer)
-    
+
     decoder = keras.Model(inputs=DecoderTensor, outputs=DecoderLayer)
 
     # Autoencoder
