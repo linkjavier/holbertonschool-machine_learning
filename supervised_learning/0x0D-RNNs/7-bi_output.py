@@ -5,6 +5,12 @@ import numpy as np
 from numpy.core.fromnumeric import size
 
 
+def softmax(x):
+    """ Softmax activation """
+
+    return np.exp(x) / np.sum(np.exp(x), axis=1, keepdims=True)
+
+
 class BidirectionalCell():
     """ Class that represents a bidirectional cell of an RNN """
 
@@ -40,15 +46,14 @@ class BidirectionalCell():
 
     def output(self, H):
         """ Public instance method that calculates all outputs for the RNN """
+        t, _, _ = H.shape
 
-        t, m, _ = H.shape
-        size = self.by.shape[1]
-        Y = np.zeros((t, m, size))
+        Y = []
 
-        for i in range(t):
-            y = np.dot(H[i], self.Wy) + self.by
-            y = np.exp(y) / np.sum(np.exp(y), axis=1,
-                                   keepdims=True)
-            Y[i] = y
+        for step in range(t):
+            y = softmax(H[step] @ self.Wy + self.by)
+            Y.append(y)
+
+        Y = np.array(Y)
 
         return Y
