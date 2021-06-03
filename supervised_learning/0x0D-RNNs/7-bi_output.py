@@ -2,7 +2,6 @@
 """ Bidirectional Output """
 
 import numpy as np
-from numpy.core.fromnumeric import size
 
 
 def softmax(x):
