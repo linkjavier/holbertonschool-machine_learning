@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" EM """
+""" EM Clustering """
 
 import numpy as np
 
