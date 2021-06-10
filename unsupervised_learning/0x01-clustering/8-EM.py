@@ -9,40 +9,37 @@ maximization = __import__('7-maximization').maximization
 
 
 def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
-    """ Function that performs the expectation maximization for a GMM """
+    """ Function  that performs the expectation maximization for a GMM """
 
-    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
-        return (None, None, None, None, None)
-    if not isinstance(k, int) or k <= 0 or k >= X.shape[0]:
-        return (None, None, None, None, None)
-    if not isinstance(iterations, int) or iterations <= 0:
-        return (None, None, None, None, None)
-    if not isinstance(tol, float) or tol < 0:
-        return (None, None, None, None, None)
-    if not isinstance(verbose, bool):
+    if type(X) is not np.ndarray or len(X.shape) != 2:
+        return None, None, None, None, None
+    if type(k) is not int or k <= 0:
+        return None, None, None, None, None
+    if type(iterations) is not int or iterations <= 0:
+        return None, None, None, None, None
+    if type(tol) is not float or tol < 0:
+        return None, None, None, None, None
+    if type(verbose) is not bool:
         return None, None, None, None, None
 
-    pi, m, S = initialize(X, k)
     actualLK = 0
+    pi, m, S = initialize(X, k)
+    g, lk = expectation(X, pi, m, S)
 
     for i in range(iterations):
-        g, lk = expectation(X, pi, m, S)
+        if verbose and (i % 10 == 0):
+            print('Log Likelihood after {} iterations: {}'.
+                  format(i, lk.round(5)))
+
         pi, m, S = maximization(X, g)
+        g, lk = expectation(X, pi, m, S)
 
-        if verbose:
-            message = 'Log Likelihood after {} iterations: {}'\
-                .format(i, lk.round(5))
-
-            if (i % 10 == 0) or (i == 0):
-                print(message)
-
-            if abs(lk - actualLK) <= tol:
-                print(message)
-                break
-
-        if abs(lk - actualLK) <= tol:
+        if abs(actualLK - lk) <= tol:
             break
-
         actualLK = lk
+
+    if verbose:
+        print('Log Likelihood after {} iterations: {}'
+              .format(i + 1, lk.round(5)))
 
     return pi, m, S, g, lk
