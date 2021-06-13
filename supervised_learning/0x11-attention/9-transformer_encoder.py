@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""  """
+""" Transformer Encoder """
 import tensorflow as tf
 
 positional_encoding = __import__('4-positional_encoding').positional_encoding
@@ -26,7 +26,9 @@ class Encoder(tf.keras.layers.Layer):
         self.dropout = tf.keras.layers.Dropout(rate=drop_rate)
 
     def call(self, x, training, mask):
-        """ Method that returns tensor of shape (batch, input_seq_len, dm) """
+        """ Method that returns tensor of shape
+            (batch, input_seq_len, dm)
+        """
 
         input_seq_len = x.shape[1]
         embeddings = self.embedding(x)
