@@ -4,19 +4,17 @@ from pymongo import MongoClient
 
 
 if __name__ == "__main__":
-    """ Script that provides some stats about Nginx logs stored in MongoDB """
+    """ Script that provides some stats about Nginx logs stored in MongoDB"""
 
     client = MongoClient('mongodb://127.0.0.1:27017')
-    collection = client.logs.nginx
-    numberOfDocuments = collection.count_documents({})
-    print("{} logs".format(numberOfDocuments))
+    logs = client.logs.nginx
+    ndoc = logs.count_documents({})
+    print("{} logs".format(ndoc))
     print("Methods:")
     methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
-
     for method in methods:
-        nmethod = collection.count_documents({"method": method})
+        nmethod = logs.count_documents({"method": method})
         print("\tmethod {}: {}".format(method, nmethod))
-
-    pathMethod = {"method": "GET", "path": "/status"}
-    npath = collection.count_documents(pathMethod)
+    filter_path = {"method": "GET", "path": "/status"}
+    npath = logs.count_documents(filter_path)
     print("{} status check".format(npath))
